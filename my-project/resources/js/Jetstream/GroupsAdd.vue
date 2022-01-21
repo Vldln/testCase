@@ -30,9 +30,6 @@ import DangerButton from "@/Jetstream/DangerButton.vue";
 import DialogModal from "@/Jetstream/DialogModal.vue";
 import Label from "@/Jetstream/Label.vue";
 import axios from "axios";
-import mitt from "mitt";
-
-const emitter = mitt();
 
 export default defineComponent({
   components: {

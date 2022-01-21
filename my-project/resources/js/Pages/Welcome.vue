@@ -1,6 +1,5 @@
 <template>
   <Head title="Welcome" />
-
   <div
     class="
       relative
