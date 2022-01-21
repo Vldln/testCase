@@ -15,7 +15,7 @@ export default defineComponent({
     return {};
   },
   mounted() {
-    axios.post("/api/expenses",{}});
+    axios.post("/api/expenses", {});
     axios.post("/api/responses", {});
   },
   methods: {},
