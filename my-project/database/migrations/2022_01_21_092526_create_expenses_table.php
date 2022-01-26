@@ -19,6 +19,7 @@ class CreateExpensesTable extends Migration
             $table->integer('amount');
             $table->foreignId('split_option_id')->index();
             $table->foreignId('group_id')->index();
+            $table->foreignId('user_id')->index();
             $table->timestamps();
         });
     }

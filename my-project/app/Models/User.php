@@ -59,8 +59,24 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function groups()
+    public function groupsOwner()
     {
-        return $this->belongsToMany(Groups::class);
+        return $this->belongsTo(Groups::class, 'id', 'user_id');
+    }
+
+
+    public function requests()
+    {
+        return $this->belongsTo(Requests::class, 'id', 'user_id');
+    }
+
+    public function invites()
+    {
+        return $this->belongsTo(Requests::class,  'id', 'member_id');
+    }
+
+    public function expenses()
+    {
+        return $this->belongsTo(Expenses::class,  'id', 'user_id');
     }
 }

@@ -13,10 +13,13 @@ class CreateResponses extends Migration
      */
     public function up()
     {
-        Schema::create('responses', function (Blueprint $table) {
+
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->index();
+            $table->foreignId('groups_id')->index();
             $table->foreignId('user_id')->index();
+            $table->unsignedBigInteger('member_id')->index();
+            $table->foreign('member_id')->references('id')->on('users');
             $table->boolean('status')->index();
             $table->timestamps();
         });
@@ -29,6 +32,6 @@ class CreateResponses extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responses');
+        Schema::dropIfExists('requests');
     }
 }

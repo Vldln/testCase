@@ -13,8 +13,14 @@ class Groups extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function requests()
+    {
+        return $this->hasMany(Requests::class);
+    }
+
     public function members()
     {
-        return $this->belongsToMany(User::class, 'user');
+        return $this->hasMany(Requests::class)->where('status', 1);
     }
 }

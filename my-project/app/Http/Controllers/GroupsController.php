@@ -98,4 +98,21 @@ class GroupsController extends Controller
             return response()->json(['message' => 'Wrong data!'], 412);
         }
     }
+    public function members(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'id' => 'required|numeric',
+            ]);
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Wrong data!'], 412);
+        }
+
+        $item = Groups::find($request->id)->members();
+        if ($item) {
+            return response()->json(['success' => true, 'item' => new GroupResource($item)]);
+        } else {
+            return response()->json(['success' => false], 404);
+        }
+    }
 }

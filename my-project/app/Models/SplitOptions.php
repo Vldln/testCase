@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class SplitOptions extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+    ];
+
+    public function expenses()
+    {
+        return $this->hasMany(Expenses::class, 'split_option_id', 'id');
+    }
 }
