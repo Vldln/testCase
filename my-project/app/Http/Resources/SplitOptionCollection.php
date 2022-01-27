@@ -15,11 +15,6 @@ class SplitOptionCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'count' => $this->count(),
-            'total' => $this->total(),
-            'per_page'  => $this->perPage(),
-            'current_page'  => $this->currentPage(),
-            'last_page'  => $this->lastPage(),
             'data' =>  $this->collection
         ];
     }

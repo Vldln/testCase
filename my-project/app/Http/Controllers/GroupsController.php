@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GroupCollection;
 use App\Http\Resources\GroupResource;
 use App\Models\Groups;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\TextUI\XmlConfiguration\Group;
@@ -63,6 +64,7 @@ class GroupsController extends Controller
 
         $item = Groups::find($request->id);
 
+
         if ($item->user_id === Auth::id()) {
             $item->delete();
             return response()->json(['success' => true]);
@@ -70,15 +72,36 @@ class GroupsController extends Controller
             return response()->json(['success' => false], 404);
         }
     }
+    public function update(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'id' => 'numeric',
+            ]);
+        } catch (Throwable $e) {
+            return response()->json(['message' => 'Wrong data!'], 412);
+        }
+
+        $item = Groups::find($request->id);
+        if ($item && $item->user_id === Auth::id()) {
+            $item->name = $request->name;
+            $item->save();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false], 404);
+        }
+    }
     public function index(Request $request)
     {
-        $items = Groups::paginate();
+        $items = Groups::with('members')->paginate();
+
         if ($items) {
             return response()->json(['success' => true, 'items' => new GroupCollection($items)]);
         } else {
             return response()->json(['success' => false], 404);
         }
     }
+
     public function invite(Request $request)
     {
         $items = Groups::paginate();

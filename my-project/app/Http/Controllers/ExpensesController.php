@@ -30,9 +30,11 @@ class ExpensesController extends Controller
         try {
             $this->validate($request, [
                 'amount' => 'required|numeric',
-                'split_option' => 'required|numeric',
+                'split_option_id' => 'required|numeric',
                 'description' => 'required|string',
                 'group_id' => 'required|numeric',
+                'user_id' => 'required|numeric',
+
             ]);
         } catch (Throwable $e) {
             return response()->json(['message' => 'Wrong data!'], 412);
@@ -40,6 +42,7 @@ class ExpensesController extends Controller
 
         $item = new Expenses();
         $item->group_id = $request->group_id;
+        $item->user_id = $request->user_id;
         $item->amount = $request->amount;
         $item->description = $request->description;
         $item->split_option_id = $request->split_option_id;

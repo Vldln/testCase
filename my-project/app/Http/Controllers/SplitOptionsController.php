@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 
 class SplitOptionsController extends Controller
 {
-    public function single(Request $request)
+    public function index(Request $request)
     {
         $items = SplitOptions::all();
 
         if ($items) {
-            return response()->json(['success' => true, 'item' => new SplitOptionCollection($items)]);
+            return response()->json(['success' => true, 'items' => new SplitOptionCollection($items)]);
         } else {
             return response()->json(['success' => false], 404);
         }

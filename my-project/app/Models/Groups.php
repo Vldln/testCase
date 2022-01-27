@@ -21,6 +21,6 @@ class Groups extends Model
 
     public function members()
     {
-        return $this->hasMany(Requests::class)->where('status', 1);
+        return $this->belongsToMany(User::class, 'requests', 'groups_id', 'member_id');
     }
 }

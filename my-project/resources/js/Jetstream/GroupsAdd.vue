@@ -45,8 +45,9 @@ export default defineComponent({
   },
   methods: {
     submit() {
-      axios.post("/api/groups", { name: this.name }).then((resp) => {
+      this.$store.dispatch("postGroup", { name: this.name }).then((resp) => {
         this.modalCreate = false;
+        this.$store.dispatch("getGroups");
       });
     },
   },

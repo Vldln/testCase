@@ -1,56 +1,50 @@
 <template>
   <div>
-    <div class="px-8 py-2" v-if="!items.length">Not found groups</div>
+    <H2 class="px-8 py-2">My own groups</H2>
+    <div class="px-8 py-2" v-if="owner && !owner.length">Not found groups</div>
     <div v-else>
-      <div v-for="item in items" :key="item.id" @click="showDetails(item.id)">
-        <div
-          class="
-            cursor-pointer
-            flex
-            justify-between
-            items-center
-            px-8
-            py-2
-            border-b border-gray-300
-          "
-        >
-          <div class="text-bold text-xl">
-            {{ item.name }}
-          </div>
-          <div class="text-bold text-gray-500 text-lg">
-            {{ item.user ? item.user.name : "" }}
-          </div>
-        </div>
-
-        <div
-          class="px-8 py-2 border-b border-gray-300"
-          v-show="openDetail === item.id"
-        >
-          <div class="flex"><GroupPanel /></div>
-        </div>
-      </div>
+      <GroupsListItem v-for="item in owner" :key="item.id" :data="item" />
+    </div>
+    <H2 class="px-8 py-2">My groups</H2>
+    <div class="px-8 py-2" v-if="member && !member.length">
+      Not found groups
+    </div>
+    <div v-else>
+      <GroupsListItem v-for="item in member" :key="item.id" :data="item" />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import axios from "axios";
 import GroupPanel from "@/Jetstream/GroupPanel.vue";
+import H2 from "@/Jetstream/H2.vue";
+import GroupsListItem from "@/Jetstream/GroupsListItem.vue";
+
 export default defineComponent({
-  components: { GroupPanel },
+  components: { GroupPanel, H2, GroupsListItem },
   data() {
-    return {
-      items: [],
-      openDetail: null,
-    };
+    return {};
+  },
+  computed: {
+    owner() {
+      return this.$store.state.groups_owner;
+    },
+    member() {
+      return this.$store.state.groups_member;
+    },
   },
   mounted() {
-    axios.get("/api/groups").then((resp) => {
-      this.items = resp.data.items.data;
-    });
+    this.getList();
+    this.getOptions();
   },
   methods: {
+    getList() {
+      this.$store.dispatch("getGroups");
+    },
+    getOptions() {
+      this.$store.dispatch("getOptions");
+    },
     showDetails(id) {
       this.openDetail = id;
     },
