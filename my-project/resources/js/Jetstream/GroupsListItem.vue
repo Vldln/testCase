@@ -25,7 +25,12 @@
       v-show="openDetail === data.id"
     >
       <div class="flex">
-        <GroupPanel :group_id="data.id" :members="members" :user="data.user" />
+        <GroupPanel
+          :group_id="data.id"
+          :members="data.members"
+          :currentMembers="currentMembers"
+          :user="data.user"
+        />
       </div>
       <UsersList
         :owner="data.user"
@@ -52,7 +57,7 @@ export default defineComponent({
     };
   },
   computed: {
-    members() {
+    currentMembers() {
       let members = [];
       this.data.members.forEach((element) => {
         members.push(element);

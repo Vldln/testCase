@@ -3,6 +3,7 @@
     <Button
       @click.native="showExpense ? (showExpense = false) : (showExpense = true)"
       class="mr-3"
+      v-if="members.length"
       >Add Expense</Button
     ><Button
       v-if="$page.props.auth.user.id === user.id"
@@ -21,9 +22,10 @@
     >
     <GroupPanelInviteForm :show="showInvite" :group_id="group_id" />
     <GroupPanelExpensesForm
-      :members="members"
+      :currentMembers="currentMembers"
       :show="showExpense"
       :group_id="group_id"
+      :groupOwner="user.id"
     />
     <GroupPanelUpdateGroupForm :show="showUpdate" :group_id="group_id" />
     <DialogModal :show="show">
@@ -66,7 +68,7 @@ export default defineComponent({
     DangerButton,
     GroupPanelUpdateGroupForm,
   },
-  props: ["user", "group_id", "members"],
+  props: ["user", "group_id", "currentMembers", "members"],
   data() {
     return {
       showExpense: false,

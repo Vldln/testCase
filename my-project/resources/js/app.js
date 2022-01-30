@@ -56,7 +56,6 @@ const store = createStore({
             axios.post("/api/expenses", {
                 split_option_id: params.type,
                 amount: params.amount,
-                percent: params.percent,
                 description: params.descr,
                 group_id: params.group_id,
                 members: params.members,

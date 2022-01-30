@@ -38,7 +38,6 @@ class ExpensesController extends Controller
                 'description' => 'required|string',
                 'group_id' => 'required|numeric',
                 'members' => 'nullable',
-                'exact_user' => 'numeric|nullable',
                 'recipient_id' => 'numeric',
 
             ]);
@@ -56,15 +55,16 @@ class ExpensesController extends Controller
 
         $item->save();
 
-        // $groupMembers = Groups::find($request->group_id)->members;
         $split_option = SplitOptions::find($request->split_option_id)->name;
 
         if ($split_option === "EXACT") {
             $transaction = new Transactions;
-            $transaction->recipient_id = $request->exact_user;
+            $transaction->recipient_id = $request->recipient_id;
             $transaction->expenses_id = $item->id;
             $transaction->pay_amount = $request->amount;
             $transaction->user_id = Auth::id();
+            $transaction->groups_id = $request->group_id;
+            $transaction->save();
         } else {
             foreach ($request->members as $user) {
                 if ($user['id'] !== Auth::id()) {
@@ -74,7 +74,7 @@ class ExpensesController extends Controller
                     $transaction->groups_id = $request->group_id;
                     $transaction->user_id = $user['id'];
                     if ($split_option === "PERCENT") {
-                        $transaction->pay_amount = ($request->amount * (1 - ($user['percent'] / 100)));
+                        $transaction->pay_amount = ($request->amount * ($user['percent'] / 100));
                     } else {
                         $transaction->pay_amount = $request->amount  / count($request->members) + 1;
                     }

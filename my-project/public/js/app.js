@@ -20032,7 +20032,7 @@ __webpack_require__.r(__webpack_exports__);
     DangerButton: _Jetstream_DangerButton_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     GroupPanelUpdateGroupForm: _Jetstream_GroupPanelUpdateGroupForm_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
-  props: ["user", "group_id", "members"],
+  props: ["user", "group_id", "currentMembers", "members"],
   data: function data() {
     return {
       showExpense: false,
@@ -20076,7 +20076,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
-  props: ["show", "group_id", "members"],
+  props: ["show", "group_id", "currentMembers", "goupOwner"],
   components: {
     DangerButton: _Jetstream_DangerButton_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     DialogModal: _Jetstream_DialogModal_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -20086,29 +20086,45 @@ __webpack_require__.r(__webpack_exports__);
       amount: null,
       descr: null,
       type: null,
-      percent: null,
       recipient_id: this.$page.props.auth.user.id
     };
   },
   computed: {
     options: function options() {
       return this.$store.state.options;
+    },
+    otherMembers: function otherMembers() {
+      var _this = this;
+
+      return this.currentMembers.filter(function (item) {
+        return item.id !== _this.$page.props.auth.user.id;
+      });
     }
   },
   methods: {
+    choisePercent: function choisePercent(item) {
+      var summ = this.otherMembers.filter(function (el) {
+        return el.id != item.id;
+      }).reduce(function (sum, elem) {
+        return sum + elem.percent;
+      }, 0);
+
+      if (summ + item.percent > 100) {
+        item.percent = 100 - summ;
+      }
+    },
     submit: function submit() {
-      var _this = this;
+      var _this2 = this;
 
       this.$store.dispatch("postExpenses", {
         type: this.type.id,
         descr: this.descr,
         amount: this.amount,
-        percent: this.percent,
         group_id: this.group_id,
         recipient_id: this.recipient_id,
-        members: this.members
+        members: this.currentMembers
       }).then(function (resp) {
-        _this.$store.dispatch("getGroups");
+        _this2.$store.dispatch("getGroups");
       });
     }
   }
@@ -20345,7 +20361,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    members: function members() {
+    currentMembers: function currentMembers() {
       var members = [];
       this.data.members.forEach(function (element) {
         members.push(element);
@@ -22780,7 +22796,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_DialogModal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DialogModal");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_ctx.members.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Button, {
+    key: 0,
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.showExpense ? _ctx.showExpense = false : _ctx.showExpense = true;
     }),
@@ -22792,8 +22809,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  }), _ctx.$page.props.auth.user.id === _ctx.user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Button, {
-    key: 0,
+  })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.$page.props.auth.user.id === _ctx.user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Button, {
+    key: 1,
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return _ctx.showInvite ? _ctx.showInvite = false : _ctx.showInvite = true;
     })
@@ -22805,7 +22822,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.$page.props.auth.user.id === _ctx.user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Button, {
-    key: 1,
+    key: 2,
     onClick: _cache[2] || (_cache[2] = function ($event) {
       return _ctx.showUpdate = true;
     })
@@ -22817,7 +22834,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* STABLE */
 
   })) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.$page.props.auth.user.id === _ctx.user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Button, {
-    key: 2,
+    key: 3,
     onClick: _cache[3] || (_cache[3] = function ($event) {
       return _ctx.deleteModal = true;
     })
@@ -22834,12 +22851,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8
   /* PROPS */
   , ["show", "group_id"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_GroupPanelExpensesForm, {
-    members: _ctx.members,
+    currentMembers: _ctx.currentMembers,
     show: _ctx.showExpense,
-    group_id: _ctx.group_id
+    group_id: _ctx.group_id,
+    groupOwner: _ctx.user.id
   }, null, 8
   /* PROPS */
-  , ["members", "show", "group_id"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_GroupPanelUpdateGroupForm, {
+  , ["currentMembers", "show", "group_id", "groupOwner"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_GroupPanelUpdateGroupForm, {
     show: _ctx.showUpdate,
     group_id: _ctx.group_id
   }, null, 8
@@ -22947,7 +22965,7 @@ var _hoisted_4 = ["value"];
 var _hoisted_5 = {
   key: 1
 };
-var _hoisted_6 = ["value"];
+var _hoisted_6 = ["onUpdate:modelValue", "onInput"];
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("% ");
 
@@ -22979,7 +22997,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return _ctx.amount = $event;
         }),
         name: "",
-        id: ""
+        id: "",
+        step: "1"
       }, null, 512
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.amount]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -23001,14 +23020,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.type]]), _ctx.type && _ctx.type.name === 'EXACT' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
         "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-          return _ctx.type = $event;
+          return _ctx.recipient_id = $event;
         }),
         name: "",
         id: ""
-      }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.options, function (item) {
+      }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.otherMembers, function (item) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
           key: item.id,
-          value: item
+          value: item.id
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 9
         /* TEXT, PROPS */
         , _hoisted_4);
@@ -23016,33 +23035,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* KEYED_FRAGMENT */
       ))], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.type]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.type && _ctx.type.name === 'PERCENT' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
-        "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-          return _ctx.type = $event;
-        }),
-        name: "",
-        id: ""
-      }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.options, function (item) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
-          key: item.id,
-          value: item
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 9
-        /* TEXT, PROPS */
-        , _hoisted_6);
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.recipient_id]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.type && _ctx.type.name === 'PERCENT' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.otherMembers, function (item) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+          "class": "flex",
+          key: item.id
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 1
+        /* TEXT */
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          type: "number",
+          max: "100",
+          "onUpdate:modelValue": function onUpdateModelValue($event) {
+            return item.percent = $event;
+          },
+          onInput: function onInput($event) {
+            return _ctx.choisePercent(item);
+          },
+          step: "1",
+          name: "",
+          id: ""
+        }, null, 40
+        /* PROPS, HYDRATE_EVENTS */
+        , _hoisted_6), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, item.percent]]), _hoisted_7]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))], 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.type]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        type: "number",
-        "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-          return _ctx.percent = $event;
-        }),
-        name: "",
-        id: ""
-      }, null, 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.percent]]), _hoisted_7])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
+      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
     }),
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DangerButton, {
@@ -23414,11 +23430,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_GroupPanel, {
     group_id: _ctx.data.id,
-    members: _ctx.members,
+    members: _ctx.data.members,
+    currentMembers: _ctx.currentMembers,
     user: _ctx.data.user
   }, null, 8
   /* PROPS */
-  , ["group_id", "members", "user"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UsersList, {
+  , ["group_id", "members", "currentMembers", "user"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UsersList, {
     owner: _ctx.data.user,
     members: _ctx.data.members,
     group_id: _ctx.data.id
@@ -27260,7 +27277,6 @@ var store = (0,vuex__WEBPACK_IMPORTED_MODULE_3__.createStore)({
       axios.post("/api/expenses", {
         split_option_id: params.type,
         amount: params.amount,
-        percent: params.percent,
         description: params.descr,
         group_id: params.group_id,
         members: params.members,
