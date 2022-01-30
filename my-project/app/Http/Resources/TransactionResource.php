@@ -17,9 +17,8 @@ class TransactionResource extends JsonResource
         return [
             'id' => $this->id,
             'pay_amount' =>  $this->pay_amount,
-            'recipient_id' =>  $this->recipient_id,
-            // 'expense' => new ExpenseResource($this->expense)
-
+            'recipient' =>  $this->recipient->name,
+            'user' => $this->user->name,
         ];
     }
 }

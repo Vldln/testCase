@@ -19,6 +19,7 @@ class CreateUserExpenses extends Migration
             $table->foreignId('expenses_id')->index();
             $table->foreignId('user_id')->index();
             $table->unsignedBigInteger('recipient_id')->index();
+            $table->unsignedBigInteger('groups_id')->index();
             $table->foreign('recipient_id')->references('id')->on('users');
             $table->integer('pay_amount');
             $table->timestamps();

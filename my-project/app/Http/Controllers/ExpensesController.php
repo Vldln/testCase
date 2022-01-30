@@ -71,6 +71,7 @@ class ExpensesController extends Controller
                     $transaction = new Transactions;
                     $transaction->recipient_id = Auth::id();
                     $transaction->expenses_id = $item->id;
+                    $transaction->groups_id = $request->group_id;
                     $transaction->user_id = $user['id'];
                     if ($split_option === "PERCENT") {
                         $transaction->pay_amount = ($request->amount * (1 - ($user['percent'] / 100)));

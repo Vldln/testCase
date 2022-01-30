@@ -12,4 +12,12 @@ class Transactions extends Model
     {
         return $this->belongsTo(Expenses::class, 'expenses_id', 'id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function recipient()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

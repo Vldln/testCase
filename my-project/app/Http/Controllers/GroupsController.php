@@ -111,16 +111,8 @@ class GroupsController extends Controller
             return response()->json(['success' => false], 404);
         }
     }
-    public function expenses(Request $request)
-    {
-        try {
-            $this->validate($request, [
-                'id' => 'required|numeric',
-            ]);
-        } catch (Throwable $e) {
-            return response()->json(['message' => 'Wrong data!'], 412);
-        }
-    }
+
+
     public function members(Request $request)
     {
         try {

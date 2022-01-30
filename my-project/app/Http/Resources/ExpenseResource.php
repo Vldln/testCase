@@ -20,6 +20,7 @@ class ExpenseResource extends JsonResource
             'split_options' => new SplitOptionResource($this->option),
             'created_at' => $this->created_at,
             'amount' => $this->amount,
+            'transactions' => TransactionResource::collection($this->transactions),
             'percent' => $this->percent,
             'group' => new GroupResource($this->group),
             'user' => new UserResource($this->user)
