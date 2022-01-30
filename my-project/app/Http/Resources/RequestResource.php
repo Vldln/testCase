@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExpenseResource extends JsonResource
+class RequestResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,13 +16,8 @@ class ExpenseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->name,
-            'split_options' => new SplitOptionResource($this->option),
             'created_at' => $this->created_at,
-            'amount' => $this->amount,
-            'percent' => $this->percent,
-            'group' => new GroupResource($this->group),
-            'user' => new UserResource($this->user)
+
         ];
     }
 }

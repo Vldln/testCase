@@ -17,6 +17,10 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'invites' => new RequestResource($this->load('invites')),
+            'comings' =>  TransactionResource::collection($this->comings),
+            'spends' =>  TransactionResource::collection($this->spends),
+
         ];
     }
 }

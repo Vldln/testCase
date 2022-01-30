@@ -130,8 +130,7 @@ class GroupsController extends Controller
         } catch (Throwable $e) {
             return response()->json(['message' => 'Wrong data!'], 412);
         }
-
-        $item = Groups::find($request->id)->members();
+        $item = Groups::find($request->id)->members()->with('invites')->get();
         if ($item) {
             return response()->json(['success' => true, 'item' => new GroupResource($item)]);
         } else {

@@ -1,29 +1,16 @@
 <template>
   <div>
-    <div v-for="item in items" :key="item.id" @click="showDetails(item.id)">
-      <div
-        class="
-          flex
-          justify-between
-          items-center
-          px-8
-          py-2
-          border-b border-gray-300
-        "
-      >
-        <div class="text-bold text-xl">
-          {{ item.name }}
+    <div>Expenses</div>
+    <div v-for="item in expenses" :key="item.id">
+      <div class="flex">
+        <div>{{ item.amount }}</div>
+        <div>{{ item.description }}</div>
+        <div>{{ item.split_options.name }}</div>
+        <div v-if="item.split_options.name === 'PERCENT'">
+          {{ item.percent }}
         </div>
-        <div class="text-bold text-gray-500 text-lg">
-          {{ item.user ? item.user.name : "" }}
-        </div>
-      </div>
-
-      <div
-        class="px-8 py-2 border-b border-gray-300"
-        v-show="openDetail === item.id"
-      >
-        <div class="flex"><GroupPanel /></div>
+        <div>{{ item.created_at }}</div>
+        <div>{{ item.user.name }}</div>
       </div>
     </div>
   </div>
@@ -31,26 +18,14 @@
 
 <script>
 import { defineComponent } from "vue";
-import axios from "axios";
-import GroupPanel from "@/Jetstream/GroupPanel.vue";
 
 export default defineComponent({
-  components: { GroupPanel },
+  components: {},
+  props: ["expenses"],
   data() {
-    return {
-      items: [],
-      openDetail: null,
-    };
+    return {};
   },
-  mounted() {
-    axios.get("/api/groups").then((resp) => {
-      this.items = resp.data.items.data;
-    });
-  },
-  methods: {
-    showDetails(id) {
-      this.openDetail = id;
-    },
-  },
+  mounted() {},
+  methods: {},
 });
 </script>

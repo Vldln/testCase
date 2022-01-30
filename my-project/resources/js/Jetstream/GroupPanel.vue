@@ -5,6 +5,7 @@
       class="mr-3"
       >Add Expense</Button
     ><Button
+      v-if="$page.props.auth.user.id === user.id"
       @click.native="showInvite ? (showInvite = false) : (showInvite = true)"
       >Invite users</Button
     >
@@ -19,7 +20,11 @@
       >Delete group</Button
     >
     <GroupPanelInviteForm :show="showInvite" :group_id="group_id" />
-    <GroupPanelExpensesForm :show="showExpense" :group_id="group_id" />
+    <GroupPanelExpensesForm
+      :members="members"
+      :show="showExpense"
+      :group_id="group_id"
+    />
     <GroupPanelUpdateGroupForm :show="showUpdate" :group_id="group_id" />
     <DialogModal :show="show">
       <template #title> Create Group </template>
@@ -61,7 +66,7 @@ export default defineComponent({
     DangerButton,
     GroupPanelUpdateGroupForm,
   },
-  props: ["user", "group_id"],
+  props: ["user", "group_id", "members"],
   data() {
     return {
       showExpense: false,

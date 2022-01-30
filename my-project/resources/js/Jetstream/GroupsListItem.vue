@@ -25,9 +25,10 @@
       v-show="openDetail === data.id"
     >
       <div class="flex">
-        <GroupPanel :group_id="data.id" :user="data.user" />
+        <GroupPanel :group_id="data.id" :members="members" :user="data.user" />
       </div>
-      <UsersList :members="data.members" :owner="data.user" />
+      <UsersList :owner="data.user" :members="data.members" />
+      <ExpensesList :expenses="data.expenses" />
     </div>
   </div>
 </template>
@@ -36,16 +37,26 @@
 import { defineComponent } from "vue";
 import GroupPanel from "@/Jetstream/GroupPanel.vue";
 import UsersList from "@/Jetstream/UsersList.vue";
+import ExpensesList from "@/Jetstream/ExpensesList.vue";
 
 export default defineComponent({
   props: ["data"],
-  components: { GroupPanel, UsersList },
+  components: { GroupPanel, UsersList, ExpensesList },
   data() {
     return {
       openDetail: null,
     };
   },
-
+  computed: {
+    members() {
+      let members = [];
+      this.data.members.forEach((element) => {
+        members.push(element);
+      });
+      members.push(this.data.user);
+      return members;
+    },
+  },
   methods: {
     showDetails(id) {
       this.openDetail ? (this.openDetail = null) : (this.openDetail = id);

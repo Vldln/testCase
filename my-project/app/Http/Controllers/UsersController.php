@@ -16,7 +16,7 @@ class UsersController extends Controller
 
     public function ownerGroups(Request $request)
     {
-        $items = User::find(Auth::id())->groupsOwner()->with('members')->paginate();
+        $items = User::find(Auth::id())->groupsOwner()->with('members', 'expenses', 'expenses.option')->paginate();
 
         if ($items) {
             return response()->json(['success' => true, 'items' => new GroupCollection($items)]);
@@ -26,7 +26,7 @@ class UsersController extends Controller
     }
     public function memberGroups(Request $request)
     {
-        $items = User::find(Auth::id())->groupsMember()->with('members')->paginate();
+        $items = User::find(Auth::id())->groupsMember()->with('members', 'expenses', 'expenses.option')->paginate();
 
         if ($items) {
             return response()->json(['success' => true, 'items' => new GroupCollection($items)]);

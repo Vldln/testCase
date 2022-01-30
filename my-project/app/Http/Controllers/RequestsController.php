@@ -28,15 +28,15 @@ class RequestsController extends Controller
         }
 
         $member = User::where('email', $request->email)->first();
+        $group_owner = Auth::id() === Groups::find($request->groups_id)->user_id;
 
         if ($member) {
             $existRequests = Requests::where([['groups_id', $request->groups_id], ['member_id', $member->id]])->first();
         } else {
-            dd('существует запрос');
             return response()->json(['success' => false], 404);
         }
 
-        if (Auth::user()->email != $request->email && !$existRequests) {
+        if ($group_owner && Auth::user()->email != $request->email && !$existRequests) {
             $item = new Requests;
             $item->user_id = Auth::id();
             $item->member_id = $member->id;

@@ -84,4 +84,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Expenses::class,  'id', 'user_id');
     }
+
+    public function comings()
+    {
+        return $this->hasMany(Transactions::class, 'recipient_id', 'id');
+    }
+
+    public function spends()
+    {
+        return $this->hasMany(Transactions::class, 'user_id', 'id');
+    }
 }

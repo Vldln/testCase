@@ -3,14 +3,24 @@
     <H2 class="px-8 py-2">My own groups</H2>
     <div class="px-8 py-2" v-if="owner && !owner.length">Not found groups</div>
     <div v-else>
-      <GroupsListItem v-for="item in owner" :key="item.id" :data="item" />
+      <GroupsListItem
+        :members="item.members"
+        v-for="item in owner"
+        :key="item.id"
+        :data="item"
+      />
     </div>
     <H2 class="px-8 py-2">My groups</H2>
     <div class="px-8 py-2" v-if="member && !member.length">
       Not found groups
     </div>
     <div v-else>
-      <GroupsListItem v-for="item in member" :key="item.id" :data="item" />
+      <GroupsListItem
+        :members="item.members"
+        v-for="item in member"
+        :key="item.id"
+        :data="item"
+      />
     </div>
   </div>
 </template>
@@ -33,6 +43,7 @@ export default defineComponent({
     member() {
       return this.$store.state.groups_member;
     },
+
   },
   mounted() {
     this.getList();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Expenses;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupResource extends JsonResource
@@ -17,8 +18,9 @@ class GroupResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'user' => $this->user,
+            'user' => new UserResource($this->user),
             'members' => UserResource::collection($this->whenLoaded('members')),
+            'expenses' => ExpenseResource::collection($this->whenLoaded('expenses')),
 
         ];
     }
