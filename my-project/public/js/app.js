@@ -20601,19 +20601,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
-  props: ["members", "owner"],
+  props: ["members", "owner", "group_id"],
   data: function data() {
     return {};
   },
   methods: {
     summSpends: function summSpends(items) {
-      var result = items.reduce(function (sum, elem) {
+      var _this = this;
+
+      var result = items.filter(function (item) {
+        return item.groups_id === _this.group_id;
+      }).reduce(function (sum, elem) {
         return sum + elem.pay_amount;
       }, 0);
       return result;
     },
     summComings: function summComings(items) {
-      var result = items.reduce(function (sum, elem) {
+      var _this2 = this;
+
+      var result = items.filter(function (item) {
+        return item.groups_id === _this2.group_id;
+      }).reduce(function (sum, elem) {
         return sum + elem.pay_amount;
       }, 0);
       return result;
@@ -23412,10 +23420,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["group_id", "members", "user"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UsersList, {
     owner: _ctx.data.user,
-    members: _ctx.data.members
+    members: _ctx.data.members,
+    group_id: _ctx.data.id
   }, null, 8
   /* PROPS */
-  , ["owner", "members"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ExpensesList, {
+  , ["owner", "members", "group_id"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_ExpensesList, {
     expenses: _ctx.data.expenses
   }, null, 8
   /* PROPS */

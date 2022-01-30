@@ -27,21 +27,25 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  props: ["members", "owner"],
+  props: ["members", "owner", "group_id"],
   data() {
     return {};
   },
   methods: {
     summSpends(items) {
-      let result = items.reduce(function (sum, elem) {
-        return sum + elem.pay_amount;
-      }, 0);
+      let result = items
+        .filter((item) => item.groups_id === this.group_id)
+        .reduce(function (sum, elem) {
+          return sum + elem.pay_amount;
+        }, 0);
       return result;
     },
     summComings(items) {
-      let result = items.reduce(function (sum, elem) {
-        return sum + elem.pay_amount;
-      }, 0);
+      let result = items
+        .filter((item) => item.groups_id === this.group_id)
+        .reduce(function (sum, elem) {
+          return sum + elem.pay_amount;
+        }, 0);
       return result;
     },
   },

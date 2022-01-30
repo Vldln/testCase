@@ -27,7 +27,11 @@
       <div class="flex">
         <GroupPanel :group_id="data.id" :members="members" :user="data.user" />
       </div>
-      <UsersList :owner="data.user" :members="data.members" />
+      <UsersList
+        :owner="data.user"
+        :members="data.members"
+        :group_id="data.id"
+      />
       <ExpensesList :expenses="data.expenses" />
     </div>
   </div>
