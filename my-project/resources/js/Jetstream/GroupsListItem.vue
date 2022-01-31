@@ -6,32 +6,26 @@
         flex
         justify-between
         datas-center
-        px-8
         py-2
         border-b border-gray-300
       "
       @click="showDetails(data.id)"
     >
-      <div class="text-bold text-xl">
+      <H3 class="text-bold text-xl">
         {{ data.name }}
-      </div>
+      </H3>
       <div class="text-bold text-gray-500 text-lg">
         {{ data.user ? data.user.name : "" }}
       </div>
     </div>
 
-    <div
-      class="px-8 py-2 border-b border-gray-300"
-      v-show="openDetail === data.id"
-    >
-      <div class="flex">
-        <GroupPanel
-          :group_id="data.id"
-          :members="data.members"
-          :currentMembers="currentMembers"
-          :user="data.user"
-        />
-      </div>
+    <div class="py-2 border-b border-gray-300" v-show="openDetail === data.id">
+      <GroupPanel
+        :group_id="data.id"
+        :members="data.members"
+        :currentMembers="currentMembers"
+        :user="data.user"
+      />
       <UsersList
         :owner="data.user"
         :members="data.members"
@@ -47,10 +41,11 @@ import { defineComponent } from "vue";
 import GroupPanel from "@/Jetstream/GroupPanel.vue";
 import UsersList from "@/Jetstream/UsersList.vue";
 import ExpensesList from "@/Jetstream/ExpensesList.vue";
+import H3 from "@/Jetstream/H3.vue";
 
 export default defineComponent({
   props: ["data"],
-  components: { GroupPanel, UsersList, ExpensesList },
+  components: { GroupPanel, UsersList, ExpensesList, H3 },
   data() {
     return {
       openDetail: null,

@@ -1,24 +1,36 @@
 <template>
   <div>
-    <div>Создатель группы:</div>
+    <div class="font-bold text-base mt-2 mb-4">Statistics:</div>
     <div class="flex">
-      <span>Name</span><span>spends</span><span>comings</span>
+      <span class="font-bold bg-gray-100 text-center min-w-[100px] py-1"
+        >Name</span
+      ><span class="font-bold py-1 text-center min-w-[100px]">Spends</span
+      ><span class="font-bold bg-gray-100 text-center min-w-[100px] py-1"
+        >Comings</span
+      >
     </div>
     <div class="flex">
-      <span> {{ owner.name }} </span>|
-      <span>{{ summSpends(owner.spends) }}</span
-      >|
-      <span>{{ summComings(owner.comings) }}</span>
+      <span class="bg-gray-100 text-center min-w-[100px] py-1">
+        {{ owner.name }}
+      </span>
+      <span class="text-center min-w-[100px] py-1">{{
+        summSpends(owner.spends)
+      }}</span>
+      <span class="bg-gray-100 text-center min-w-[100px] py-1">{{
+        summComings(owner.comings)
+      }}</span>
     </div>
-    <div>{{ owner.name }}</div>
-    <div>Участники:</div>
-    <div class="flex">
-      <span>Name</span><span>spends</span><span>comings</span>
-    </div>
+
     <div v-for="item in members" :key="item.id" class="flex">
-      <span> {{ item.name }} </span>| <span>{{ summSpends(item.spends) }}</span
-      >|
-      <span>{{ summComings(item.comings) }}</span>
+      <span class="bg-gray-100 text-center min-w-[100px] py-1">
+        {{ item.name }}
+      </span>
+      <span class="text-center min-w-[100px] py-1">{{
+        summSpends(item.spends)
+      }}</span>
+      <span class="bg-gray-100 text-center min-w-[100px] py-1">{{
+        summComings(item.comings)
+      }}</span>
     </div>
   </div>
 </template>

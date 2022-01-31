@@ -1,33 +1,45 @@
 <template>
-  <div class="flex">
+  <div class="grid grid-cols-12 md:flex gap-3 py-2">
     <Button
       @click.native="showExpense ? (showExpense = false) : (showExpense = true)"
-      class="mr-3"
+      class="md:mr-3 col-span-6 sm:col-span-3"
       v-if="members.length"
       >Add Expense</Button
     ><Button
+      class="md:mr-3 col-span-6 sm:col-span-3"
       v-if="$page.props.auth.user.id === user.id"
       @click.native="showInvite ? (showInvite = false) : (showInvite = true)"
       >Invite users</Button
     >
     <Button
+      class="md:mr-3 col-span-6 sm:col-span-3"
       v-if="$page.props.auth.user.id === user.id"
       @click.native="showUpdate = true"
       >Change name group</Button
     >
     <Button
+      class="md:mr-3 col-span-6 sm:col-span-3"
       v-if="$page.props.auth.user.id === user.id"
       @click.native="deleteModal = true"
       >Delete group</Button
     >
-    <GroupPanelInviteForm :show="showInvite" :group_id="group_id" />
+    <GroupPanelInviteForm
+      :show="showInvite"
+      :group_id="group_id"
+      @close:modal-invite="showInvite = false"
+    />
     <GroupPanelExpensesForm
       :currentMembers="currentMembers"
       :show="showExpense"
       :group_id="group_id"
       :groupOwner="user.id"
+      @close:modal-expenses="showExpense = false"
     />
-    <GroupPanelUpdateGroupForm :show="showUpdate" :group_id="group_id" />
+    <GroupPanelUpdateGroupForm
+      :show="showUpdate"
+      :group_id="group_id"
+      @close:modal-update="showUpdate = false"
+    />
     <DialogModal :show="show">
       <template #title> Create Group </template>
       <template #content>
@@ -42,10 +54,19 @@
     </DialogModal>
     <DialogModal :show="deleteModal">
       <template #title> Delete Group </template>
-      <template #footer>
-        <DangerButton @click.native="deleteGroup">Delete</DangerButton
-        ><Button @click.native="deleteModal = false">Cancel</Button>
-      </template>
+      <template #content>
+        <div class="flex justify-around">
+          <DangerButton
+            @click.native="deleteGroup"
+            class="mr-1 sm:mr-0 w-full sm:w-1/4"
+            >Delete</DangerButton
+          ><Button
+            @click.native="deleteModal = false"
+            class="ml-1 sm:ml-0 w-full sm:w-1/4"
+            >Cancel</Button
+          >
+        </div></template
+      >
     </DialogModal>
   </div>
 </template>

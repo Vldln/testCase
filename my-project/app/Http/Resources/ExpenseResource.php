@@ -16,7 +16,7 @@ class ExpenseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->name,
+            'description' => $this->description,
             'split_options' => new SplitOptionResource($this->option),
             'created_at' => $this->created_at,
             'amount' => $this->amount,
