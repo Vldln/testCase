@@ -76,7 +76,7 @@ class ExpensesController extends Controller
                     if ($split_option === "PERCENT") {
                         $transaction->pay_amount = ($request->amount * ($user['percent'] / 100));
                     } else {
-                        $transaction->pay_amount = $request->amount  / count($request->members) + 1;
+                        $transaction->pay_amount = $request->amount  / count($request->members);
                     }
                     $transaction->save();
                 }
